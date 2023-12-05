@@ -7,6 +7,8 @@ use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\API\Repository\Values\User\User;
 use eZ\Publish\Core\MVC\Symfony\Security\UserInterface as EzUserInterface;
+use Ibexa\Contracts\Core\Repository\PermissionResolver;
+use Ibexa\Core\Repository\Values\User\UserReference;
 use Netgen\Bundle\EzSyliusBundle\Entity\EzSyliusUser;
 use Sylius\Bundle\UserBundle\Provider\UserProviderInterface as SyliusUserProviderInterface;
 use Sylius\Component\User\Model\UserInterface as SyliusUserInterface;
@@ -35,6 +37,8 @@ class EmailOrNameBased implements UserProviderInterface
      */
     protected $repository;
 
+    protected PermissionResolver $permissionResolver;
+    
     /**
      * @var string
      */
@@ -54,12 +58,14 @@ class EmailOrNameBased implements UserProviderInterface
         EntityRepository $eZUserRepository,
         UserRepositoryInterface $syliusUserRepository,
         Repository $repository,
+        PermissionResolver $permissionResolver,
         $syliusUserType
     ) {
         $this->innerUserProvider = $innerUserProvider;
         $this->eZUserRepository = $eZUserRepository;
         $this->syliusUserRepository = $syliusUserRepository;
         $this->repository = $repository;
+        $this->permissionResolver = $permissionResolver;
         $this->syliusUserType = $syliusUserType;
     }
 
@@ -90,7 +96,10 @@ class EmailOrNameBased implements UserProviderInterface
 
         if ($user instanceof EzUserInterface && $apiUser instanceof User) {
             $user->setAPIUser($apiUser);
-            $this->repository->setCurrentUser($apiUser);
+
+            $this->permissionResolver->setCurrentUserReference(
+                $apiUser
+            );
         }
 
         return $user;

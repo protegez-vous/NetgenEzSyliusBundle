@@ -7,6 +7,7 @@ use eZ\Publish\Core\FieldType\FieldType;
 use eZ\Publish\Core\FieldType\Value as BaseValue;
 use eZ\Publish\SPI\FieldType\Value as SPIValue;
 use eZ\Publish\SPI\Persistence\Content\FieldValue;
+use Ibexa\Contracts\Core\Repository\Values\ContentType\FieldDefinition;
 use Sylius\Component\Product\Model\ProductInterface;
 use Sylius\Component\Resource\Repository\RepositoryInterface;
 
@@ -44,7 +45,7 @@ class Type extends FieldType
      *
      * @return string
      */
-    public function getName(SPIValue $value)
+    public function getName(SPIValue $value, FieldDefinition $fieldDefinition, string $languageCode) : string
     {
         return (string) $value;
     }

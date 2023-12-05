@@ -5,7 +5,8 @@ services:
             - "@sylius.shop_user_provider.email_or_name_based"
             - "@netgen_ez_sylius.repository.ez_sylius_user"
             - "@sylius.repository.shop_user"
-            - "@ezpublish.api.repository"
+            - "@ibexa.api.repository"
+            - '@Ibexa\Contracts\Core\Repository\PermissionResolver'
             - "shop"
 
     netgen_ez_sylius.admin_user.provider.email_or_name_based:
@@ -14,7 +15,8 @@ services:
             - "@sylius.admin_user_provider.email_or_name_based"
             - "@netgen_ez_sylius.repository.ez_sylius_user"
             - "@sylius.repository.admin_user"
-            - "@ezpublish.api.repository"
+            - "@ibexa.api.repository"
+            - '@Ibexa\Contracts\Core\Repository\PermissionResolver'
             - "admin"
 
     netgen_ez_sylius.user.provider.composite:

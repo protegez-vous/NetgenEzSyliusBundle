@@ -17,8 +17,8 @@ class Configuration implements ConfigurationInterface
      */
     public function getConfigTreeBuilder()
     {
-        $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('netgen_ez_sylius');
+        $treeBuilder = new TreeBuilder( 'netgen_ez_sylius' );
+        $rootNode = $treeBuilder->getRootNode();
 
         return $treeBuilder;
     }

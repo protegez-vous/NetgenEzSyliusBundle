@@ -2,27 +2,18 @@
 
 namespace Netgen\Bundle\EzSyliusBundle\Authentication;
 
-use eZ\Publish\API\Repository\Repository;
+use Ibexa\Contracts\Core\Repository\PermissionResolver;
+use Ibexa\Contracts\Core\Repository\Repository;
 use eZ\Publish\API\Repository\Values\User\User;
 use eZ\Publish\Core\MVC\Symfony\Security\UserInterface as EzUserInterface;
-use Symfony\Component\Security\Core\Authentication\Provider\DaoAuthenticationProvider as BaseAuthenticationProvider;
+use Ibexa\Core\MVC\Symfony\Security\Authentication\RepositoryAuthenticationProvider as BaseAuthenticationProvider;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 class DaoAuthenticationProvider extends BaseAuthenticationProvider
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Repository
-     */
-    protected $repository;
 
-    /**
-     * @param \eZ\Publish\API\Repository\Repository $repository
-     */
-    public function setRepository(Repository $repository)
-    {
-        $this->repository = $repository;
-    }
+    private $permissionResolver;
 
     /**
      * {@inheritdoc}
@@ -35,7 +26,9 @@ class DaoAuthenticationProvider extends BaseAuthenticationProvider
             $apiUser = $user->getAPIUser();
 
             if ($apiUser instanceof User) {
-                $this->repository->setCurrentUser($apiUser);
+                $this->permissionResolver->setCurrentUserReference(
+                    $apiUser
+                );
             }
         }
     }

@@ -33,14 +33,21 @@ trait User
     /**
      * @return \eZ\Publish\API\Repository\Values\User\UserReference
      */
-    public function getAPIUserReference(): APIUserReference
+    public function getAPIUserReference() :? APIUserReference
     {
         if ($this->reference === null && class_exists(UserReference::class)) {
-            $this->reference = new UserReference(
-                $this->apiUser instanceof APIUser ?
-                    $this->apiUser->id :
-                    null
-            );
+
+// Original code - maybe better?
+//            $this->reference = new UserReference(
+//                $this->apiUser instanceof APIUser ?
+//                    $this->apiUser->id :
+//                    null
+//            );
+
+            if( $this->apiUser instanceof APIUser )
+            {
+                $this->reference = new UserReference( $this->apiUser->id );
+            }
         }
 
         return $this->reference;
@@ -79,10 +86,12 @@ trait User
      */
     public function isEqualTo(BaseUserInterface $user): bool
     {
-        if ($user instanceof self && $this->apiUser instanceof APIUser) {
-            return $user->getAPIUser()->id === $this->apiUser->id;
-        }
-
-        return false;
+        // User from session is missing the API user. Method simplified.
+        return $user instanceof self && $this->id == $user->id;
+//        if ($user instanceof self && $this->apiUser instanceof APIUser) {
+//            return $user->getAPIUser()->id === $this->apiUser->id;
+//        }
+//
+//        return false;
     }
 }
