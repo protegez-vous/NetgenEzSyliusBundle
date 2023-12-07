@@ -38,7 +38,7 @@ class NetgenEzSyliusExtension extends Extension implements PrependExtensionInter
     {
         $configFile = __DIR__ . '/../Resources/config/ezplatform.yml';
         $config = Yaml::parse(file_get_contents($configFile));
-        $container->prependExtensionConfig('ezpublish', $config);
+        $container->prependExtensionConfig('ibexa', $config);
         $container->addResource(new FileResource($configFile));
     }
 }
